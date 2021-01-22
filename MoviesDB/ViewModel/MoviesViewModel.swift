@@ -15,13 +15,28 @@ class MoviesViewModel {
     
     let name: String
     let description: String
-    let moviePosterURL: URL?
+    
+    var moviePosterURL: URL?
     var moviePoster: UIImage?
     var state = MovieModelState.New
     
     init(movie: SearchResult) {
         self.name = movie.Title
         self.description = "\(movie.movieType) released on \(movie.Year)"
-        self.moviePosterURL = URL(string: movie.Poster)
+        if movie.Poster.isValidURL {
+            self.moviePosterURL = URL(string: movie.Poster)
+        }
+    }
+}
+
+extension String {
+    
+    var isValidURL: Bool {
+        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        if let match = detector.firstMatch(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count)) {
+            return match.range.length == self.utf16.count
+        } else {
+            return false
+        }
     }
 }
