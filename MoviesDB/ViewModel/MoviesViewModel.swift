@@ -14,12 +14,14 @@ enum MovieModelState {
 class MoviesViewModel {
     
     let name: String
+    let imdbID: String
     
     var moviePosterURL: URL?
     var moviePoster: UIImage?
     var state = MovieModelState.New
     
     init(movie: SearchResult) {
+        self.imdbID = movie.imdbID
         self.name = "\(movie.Title) - \(movie.Year)"
         if movie.Poster.isValidURL {
             self.moviePosterURL = URL(string: movie.Poster)

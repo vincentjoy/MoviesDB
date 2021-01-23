@@ -10,6 +10,7 @@ import UIKit
 protocol CollectionViewDriverDelegate: class {
     func startPagination()
     func refreshList()
+    func didSelectItem(with id: String)
 }
 
 class MoviesListCollectionViewDriver: NSObject {
@@ -78,6 +79,8 @@ class MoviesListCollectionViewDriver: NSObject {
         
         if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
             
+            print("\nCached image at index \(indexPath.item) - \n\(cachedImage)\n")
+            
             movieData.moviePoster = cachedImage
             self.pendingOperations.downloadsInProgress.removeValue(forKey: indexPath)
             self.collectionView.reloadItems(at: [indexPath])
@@ -102,8 +105,6 @@ class MoviesListCollectionViewDriver: NSObject {
             pendingOperations.downloadsInProgress[indexPath] = downloader
             pendingOperations.downloadQueue.addOperation(downloader)
         }
-        
-        print(pendingOperations.downloadsInProgress)
     }
 }
 
@@ -137,7 +138,8 @@ extension MoviesListCollectionViewDriver: UICollectionViewDelegate, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected at \(indexPath.item)")
+        let selectedID = movieData[indexPath.item].imdbID
+        self.delegate?.didSelectItem(with: selectedID)
     }
 }
 

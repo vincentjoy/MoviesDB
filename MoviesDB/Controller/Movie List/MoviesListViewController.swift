@@ -151,4 +151,12 @@ extension MoviesListViewController: CollectionViewDriverDelegate {
         pageCount = 1
         fetchMovies()
     }
+    
+    func didSelectItem(with id: String) {
+        
+        if let detailsVC = storyboard!.instantiateViewController(withIdentifier: "MovieDetailsViewController") as? MovieDetailsViewController {
+            detailsVC.imdbID = id
+            navigationController?.pushViewController(detailsVC, animated: true)
+        }
+    }
 }
