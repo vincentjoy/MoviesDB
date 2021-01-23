@@ -25,7 +25,7 @@ class MovieDetailsOutletObject: NSObject {
         
         movieTitle.text = "\(movieDetails.Title) (\(movieDetails.Year))"
         movieDirector.text = "Director: \(movieDetails.Director)"
-        movieActors.text = "Actors: \(movieDetails.Director)"
+        movieActors.text = "Actors: \(movieDetails.Actors)"
         moviePlot.text = "\nSynopsis: \(movieDetails.Plot)\n"
         movieRated.text = "Rated: \(movieDetails.Rated)"
         movieLanguage.text = "Language: \(movieDetails.Language)"

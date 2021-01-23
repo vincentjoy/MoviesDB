@@ -79,8 +79,6 @@ class MoviesListCollectionViewDriver: NSObject {
         
         if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
             
-            print("\nCached image at index \(indexPath.item) - \n\(cachedImage)\n")
-            
             movieData.moviePoster = cachedImage
             self.pendingOperations.downloadsInProgress.removeValue(forKey: indexPath)
             self.collectionView.reloadItems(at: [indexPath])
