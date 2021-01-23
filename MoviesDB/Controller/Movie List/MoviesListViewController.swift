@@ -99,7 +99,7 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
     
     @IBAction func restructureUI(_ sender: Any) {
         isGridView = !isGridView
-        let buttonTitle = isGridView ? "Grid" : "List"
+        let buttonTitle = isGridView ? "List" : "Grid"
         outletObjects.changeUIButton.setTitle(buttonTitle, for: .normal)
         collectionViewDriver?.reloadCV(for: isGridView)
     }

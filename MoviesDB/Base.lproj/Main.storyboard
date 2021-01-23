@@ -234,7 +234,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6LP-Zm-IO4">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="745" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="6LP-Zm-IO4">
                                                 <rect key="frame" x="0.0" y="81.5" width="366" height="19"/>
                                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                 <nil key="textColor"/>
@@ -264,6 +264,7 @@
                                     <constraint firstItem="Ipw-u5-NXk" firstAttribute="centerX" secondItem="Vn9-6L-vKt" secondAttribute="centerX" id="mCz-Gd-usS"/>
                                     <constraint firstItem="Ipw-u5-NXk" firstAttribute="top" secondItem="Vn9-6L-vKt" secondAttribute="top" constant="16" id="rhC-1T-KbG"/>
                                     <constraint firstItem="76A-Hg-AS4" firstAttribute="leading" secondItem="Vn9-6L-vKt" secondAttribute="leading" constant="24" id="ssC-Jt-NIe"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="76A-Hg-AS4" secondAttribute="bottom" constant="16" id="yc0-Qc-ct0"/>
                                 </constraints>
                             </view>
                         </subviews>
