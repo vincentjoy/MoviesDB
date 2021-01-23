@@ -19,6 +19,7 @@ class MoviesListCollectionViewDriver: NSObject {
         super.init()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 44, right: 8)
     }
     
     func reloadCV(with movies: [SearchResult]) {
@@ -27,13 +28,14 @@ class MoviesListCollectionViewDriver: NSObject {
         for movie in movies {
             movieData.append(MoviesViewModel(movie: movie))
         }
+        collectionView.isHidden = false
         self.collectionView.reloadData()
     }
     
     func clearList() {
         pendingOperations.downloadQueue.cancelAllOperations()
+        movieData.removeAll()
         collectionView.isHidden = true
-        movieData = [MoviesViewModel]()
         collectionView.reloadData()
     }
     
@@ -85,9 +87,11 @@ extension MoviesListCollectionViewDriver: UICollectionViewDelegate, UICollection
             
             let dataSource = movieData[indexPath.item]
             cell.configureCell(with: dataSource)
+            cell.shadowDecorate()
             
             switch (dataSource.state) {
             case .Failed:
+                print("Failed at \(indexPath.item)")
                 cell.failedLoading()
             case .New:
                 startDownload(for: dataSource, at: indexPath)
@@ -100,14 +104,21 @@ extension MoviesListCollectionViewDriver: UICollectionViewDelegate, UICollection
         
         return UICollectionViewCell()
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Selected at \(indexPath.item)")
+    }
+}
+
+extension MoviesListCollectionViewDriver: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width = UIScreen.main.bounds.width/2 - 8
-        return CGSize(width: width, height: 150)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected at \(indexPath.item)")
+        let padding: CGFloat = 8
+        let cellWidth = UIScreen.main.bounds.size.width/3 - (4*padding)
+        let titleHeight: CGFloat = 44
+        let cellHeight: CGFloat = cellWidth + (0.25*cellWidth) + titleHeight
+        
+        return CGSize(width: cellWidth, height: cellHeight)
     }
 }

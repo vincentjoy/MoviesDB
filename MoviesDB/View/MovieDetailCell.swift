@@ -13,17 +13,15 @@ class MovieDetailCell: UICollectionViewCell {
     
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var movieName: UILabel!
-    @IBOutlet weak var movieDescription: UILabel!
     
     func configureCell(with movie: MoviesViewModel) {
         
         imageView.image = movie.moviePoster
         movieName.text = movie.name
-        movieDescription.text = movie.description
     }
     
     func failedLoading() {
         
-        /* Show the place holer image here or handle the failed download case */
+        imageView.image = UIImage.init(named: "poster_placeholder.png")
     }
 }

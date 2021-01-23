@@ -29,6 +29,7 @@ class Webservice {
                 completion(.Failure(NetworkError.parameterEncodingFailed))
                 return
             }
+            request.httpBody = serializedParams
         }
         
         let task = URLSession(configuration: .default).dataTask(with: request) { data, response, error in
@@ -49,9 +50,7 @@ class Webservice {
             case .success:
                 let jsonDecoder = JSONDecoder()
                 if let decodedData = try? jsonDecoder.decode(T.self, from: receivedData) {
-                    DispatchQueue.main.async {
-                        completion(.ResponseObject(decodedData))
-                    }
+                    completion(.ResponseObject(decodedData))
                 } else if let decodedData = try? jsonDecoder.decode([T].self, from: receivedData) {
                     completion(.ResponseArray(decodedData))
                 } else {

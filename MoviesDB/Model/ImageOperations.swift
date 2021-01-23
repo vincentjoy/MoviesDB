@@ -30,7 +30,13 @@ class ImageDownloader: Operation {
             return
         }
         
-        guard let url = movieObject.moviePosterURL, let imageData = try? Data(contentsOf: url) else { return }
+        guard let url = movieObject.moviePosterURL else {
+            movieObject.moviePoster = nil
+            movieObject.state = .Failed
+            return
+        }
+        
+        guard let imageData = try? Data(contentsOf: url) else { return }
         
         if isCancelled {
             return

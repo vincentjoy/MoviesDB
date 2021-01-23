@@ -32,12 +32,20 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
 
     func fetchMovies() {
         
+        outletObjects.loader.startAnimating()
+        
         Webservice.shared.fetch(method: .Get, url: WebServiceRoute.MoviesListPath(searchText, pageCount), type: MoviesModel.self) { [weak self] (response) in
+            
+            DispatchQueue.main.async {
+                self?.outletObjects.loader.stopAnimating()
+            }
             
             switch response {
             case .ResponseObject(let movies):
                 if !movies.Search.isEmpty {
-                    self?.collectionViewDriver?.reloadCV(with: movies.Search)
+                    DispatchQueue.main.async {
+                        self?.collectionViewDriver?.reloadCV(with: movies.Search)
+                    }
                 }
             case .Failure(let reason):
                 print("Error with reason - \(reason.localizedDescription)")

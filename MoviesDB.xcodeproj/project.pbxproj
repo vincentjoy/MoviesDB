@@ -25,6 +25,7 @@
 		9820B44125BB4B7700880DF8 /* NetworkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9820B44025BB4B7700880DF8 /* NetworkConfig.swift */; };
 		9820B44625BB4C3D00880DF8 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9820B44525BB4C3D00880DF8 /* NetworkError.swift */; };
 		9820B45525BB53AC00880DF8 /* ReusableUIComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9820B45425BB53AC00880DF8 /* ReusableUIComponent.swift */; };
+		9820B45D25BBD16500880DF8 /* MovieDBExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9820B45C25BBD16500880DF8 /* MovieDBExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		9820B44025BB4B7700880DF8 /* NetworkConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConfig.swift; sourceTree = "<group>"; };
 		9820B44525BB4C3D00880DF8 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9820B45425BB53AC00880DF8 /* ReusableUIComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableUIComponent.swift; sourceTree = "<group>"; };
+		9820B45C25BBD16500880DF8 /* MovieDBExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDBExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +127,7 @@
 				9820B3C825BB152200880DF8 /* Info.plist */,
 				9820B3BA25BB152100880DF8 /* AppDelegate.swift */,
 				9820B3BC25BB152100880DF8 /* SceneDelegate.swift */,
-				9820B45325BB533900880DF8 /* Protocols */,
+				9820B45325BB533900880DF8 /* Protocol Extensions */,
 				9820B3F125BB157600880DF8 /* Networking */,
 				9820B3ED25BB154100880DF8 /* Model */,
 				9820B3F025BB156500880DF8 /* ViewModel */,
@@ -198,12 +200,13 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		9820B45325BB533900880DF8 /* Protocols */ = {
+		9820B45325BB533900880DF8 /* Protocol Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				9820B45425BB53AC00880DF8 /* ReusableUIComponent.swift */,
+				9820B45C25BBD16500880DF8 /* MovieDBExtensions.swift */,
 			);
-			path = Protocols;
+			path = "Protocol Extensions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -344,6 +347,7 @@
 				9820B43025BB464800880DF8 /* ImageOperations.swift in Sources */,
 				9820B42B25BB248800880DF8 /* MovieDetailCell.swift in Sources */,
 				9820B40325BB1B6F00880DF8 /* MoviesModel.swift in Sources */,
+				9820B45D25BBD16500880DF8 /* MovieDBExtensions.swift in Sources */,
 				9820B40D25BB1DA500880DF8 /* MoviesViewModel.swift in Sources */,
 				9820B45525BB53AC00880DF8 /* ReusableUIComponent.swift in Sources */,
 				9820B44625BB4C3D00880DF8 /* NetworkError.swift in Sources */,
