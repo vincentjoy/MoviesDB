@@ -14,7 +14,9 @@ class Webservice {
     func fetch<T:Codable>(method: HTTPMethod, url: WebServiceRoute, parameters:Any?=nil, type:T.Type, completion: @escaping (WebServiceCompletion<T>) -> ()) {
         
         guard let requestURL = URL(string: url.Route) else {
-            completion(.Failure(NetworkError.malformedURL))
+            DispatchQueue.main.async {
+                completion(.Failure(NetworkError.malformedURL))
+            }
             return
         }
         
@@ -26,7 +28,9 @@ class Webservice {
         
         if let requestBody = parameters as? [String:Any] {
             guard let serializedParams = try? JSONSerialization.data(withJSONObject: requestBody, options: .prettyPrinted) else {
-                completion(.Failure(NetworkError.parameterEncodingFailed))
+                DispatchQueue.main.async {
+                    completion(.Failure(NetworkError.parameterEncodingFailed))
+                }
                 return
             }
             request.httpBody = serializedParams
@@ -35,13 +39,17 @@ class Webservice {
         let task = URLSession(configuration: .default).dataTask(with: request) { data, response, error in
             
             guard (error == nil) else {
-                completion(.Failure(NetworkError.failed))
+                DispatchQueue.main.async {
+                    completion(.Failure(NetworkError.failed))
+                }
                 return
             }
             
             guard let responseData = response as? HTTPURLResponse,
                 let receivedData = data else {
-                completion(.Failure(NetworkError.noResponseData))
+                DispatchQueue.main.async {
+                    completion(.Failure(NetworkError.noResponseData))
+                }
                 return
             }
             
@@ -50,14 +58,22 @@ class Webservice {
             case .success:
                 let jsonDecoder = JSONDecoder()
                 if let decodedData = try? jsonDecoder.decode(T.self, from: receivedData) {
-                    completion(.ResponseObject(decodedData))
+                    DispatchQueue.main.async {
+                        completion(.ResponseObject(decodedData))
+                    }
                 } else if let decodedData = try? jsonDecoder.decode([T].self, from: receivedData) {
-                    completion(.ResponseArray(decodedData))
+                    DispatchQueue.main.async {
+                        completion(.ResponseArray(decodedData))
+                    }
                 } else {
-                    completion(.Failure(NetworkError.unableToDecodeResponseData))
+                    DispatchQueue.main.async {
+                        completion(.Failure(NetworkError.unableToDecodeResponseData))
+                    }
                 }
             case .failure(let error):
-                completion(.Failure(error))
+                DispatchQueue.main.async {
+                    completion(.Failure(error))
+                }
             }
         }
         task.resume()

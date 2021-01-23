@@ -14,6 +14,8 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
     private var collectionViewDriver: MoviesListCollectionViewDriver?
     private var pageCount = 1
     private var searchText = ""
+    private var ongoingPagination = false
+    private lazy var paginationIndicatorHeight: CGFloat = 464
     
     override func viewDidLoad() {
         
@@ -21,6 +23,7 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
         
         self.title = "Movies List"
         collectionViewDriver = MoviesListCollectionViewDriver(cv: outletObjects.collectionView)
+        collectionViewDriver?.delegate = self
         
         outletObjects.searchBar.inputAccessoryView = createInputAccessoryView() 
         outletObjects.searchBar.becomeFirstResponder()
@@ -32,26 +35,35 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
 
     func fetchMovies() {
         
-        outletObjects.loader.startAnimating()
+        if !ongoingPagination {
+            outletObjects.loader.startAnimating()
+            outletObjects.noResultsView.isHidden = true
+        }
         
         Webservice.shared.fetch(method: .Get, url: WebServiceRoute.MoviesListPath(searchText, pageCount), type: MoviesModel.self) { [weak self] (response) in
             
-            DispatchQueue.main.async {
-                self?.outletObjects.loader.stopAnimating()
+            guard let self = self else {
+                return
+            }
+            
+            self.outletObjects.loader.stopAnimating()
+            if self.ongoingPagination {
+                self.presentPaginationIndicator(false)
             }
             
             switch response {
             case .ResponseObject(let movies):
                 if !movies.Search.isEmpty {
-                    DispatchQueue.main.async {
-                        self?.collectionViewDriver?.reloadCV(with: movies.Search)
-                    }
+                    self.collectionViewDriver?.reloadCV(with: movies.Search, fromPagination: self.ongoingPagination)
                 }
             case .Failure(let reason):
                 print("Error with reason - \(reason.localizedDescription)")
+                self.showNoResponseView()
             default:
-                print("Default")
+                self.showNoResponseView()
             }
+            
+            self.ongoingPagination = false
         }
     }
     
@@ -59,6 +71,8 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
     
         if searchText.count==0 {
             self.searchText = ""
+            pageCount = 1
+            outletObjects.noResultsView.isHidden = true
             collectionViewDriver?.clearList()
         }
     }
@@ -68,7 +82,58 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
         searchBar.resignFirstResponder()
         if let searchText = searchBar.text {
             self.searchText = searchText
+            pageCount = 1
             fetchMovies()
+        }
+    }
+    
+    func showNoResponseView() {
+        
+        outletObjects.loader.stopAnimating()
+        outletObjects.collectionView.isHidden = true
+        outletObjects.noResultsView.isHidden = false
+    }
+    
+    @IBAction func retryAction(_ sender: Any) {
+        fetchMovies()
+    }
+}
+
+extension MoviesListViewController: CollectionViewDriverDelegate {
+    
+    func startPagination() {
+        
+        if !ongoingPagination {
+            ongoingPagination = true
+            self.presentPaginationIndicator(true)
+            pageCount += 1
+            fetchMovies()
+        }
+    }
+    
+    func presentPaginationIndicator(_ show: Bool) {
+        
+        guard searchText.count>0 else {
+            return
+        }
+        
+        if show {
+            
+            outletObjects.paginationIndicatorView.isHidden = false
+            outletObjects.paginationIndicator.startAnimating()
+            outletObjects.paginationIndicatorBottom.constant = 0
+            UIView.animate(withDuration: 0.25) {
+                self.view.layoutIfNeeded()
+            }
+            
+        } else {
+            
+            outletObjects.paginationIndicatorBottom.constant = -paginationIndicatorHeight
+            UIView.animate(withDuration: 0.25) {
+                self.view.layoutIfNeeded()
+                self.outletObjects.paginationIndicator.stopAnimating()
+                self.outletObjects.paginationIndicatorView.isHidden = true
+            }
         }
     }
 }

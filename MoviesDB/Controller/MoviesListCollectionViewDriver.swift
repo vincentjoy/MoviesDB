@@ -7,12 +7,17 @@
 
 import UIKit
 
+protocol CollectionViewDriverDelegate: class {
+    func startPagination()
+}
+
 class MoviesListCollectionViewDriver: NSObject {
 
+    weak var delegate: CollectionViewDriverDelegate?
     let collectionView: UICollectionView
-    private var movieData: [MoviesViewModel] = []
-    private let pendingOperations = PendingOperations()
-    private let imageCache = NSCache<NSString, UIImage>()
+    var movieData: [MoviesViewModel] = []
+    let pendingOperations = PendingOperations()
+    let imageCache = NSCache<NSString, UIImage>()
     
     init(cv: UICollectionView) {
         self.collectionView = cv
@@ -22,9 +27,11 @@ class MoviesListCollectionViewDriver: NSObject {
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 44, right: 8)
     }
     
-    func reloadCV(with movies: [SearchResult]) {
+    func reloadCV(with movies: [SearchResult], fromPagination: Bool) {
         
-        movieData.removeAll()
+        if !fromPagination {
+            movieData.removeAll()
+        }
         for movie in movies {
             movieData.append(MoviesViewModel(movie: movie))
         }
@@ -120,5 +127,18 @@ extension MoviesListCollectionViewDriver: UICollectionViewDelegateFlowLayout {
         let cellHeight: CGFloat = cellWidth + (0.25*cellWidth) + titleHeight
         
         return CGSize(width: cellWidth, height: cellHeight)
+    }
+}
+
+extension MoviesListCollectionViewDriver: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        let height = scrollView.frame.size.height
+        let contentYoffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        if distanceFromBottom < height {
+            self.delegate?.startPagination()
+        }
     }
 }
