@@ -15,7 +15,8 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
     private var pageCount = 1
     private var searchText = ""
     private var ongoingPagination = false
-    private lazy var paginationIndicatorHeight: CGFloat = 464
+    private var isGridView = true
+    private lazy var paginationIndicatorHeight: CGFloat = 64
     
     override func viewDidLoad() {
         
@@ -89,9 +90,18 @@ class MoviesListViewController: UIViewController, UISearchBarDelegate, InputAcce
     
     func showNoResponseView() {
         
-        outletObjects.loader.stopAnimating()
-        outletObjects.collectionView.isHidden = true
-        outletObjects.noResultsView.isHidden = false
+        if !ongoingPagination {
+            outletObjects.loader.stopAnimating()
+            outletObjects.collectionView.isHidden = true
+            outletObjects.noResultsView.isHidden = false
+        }
+    }
+    
+    @IBAction func restructureUI(_ sender: Any) {
+        isGridView = !isGridView
+        let buttonTitle = isGridView ? "Grid" : "List"
+        outletObjects.changeUIButton.setTitle(buttonTitle, for: .normal)
+        collectionViewDriver?.reloadCV(for: isGridView)
     }
     
     @IBAction func retryAction(_ sender: Any) {
@@ -135,5 +145,10 @@ extension MoviesListViewController: CollectionViewDriverDelegate {
                 self.outletObjects.paginationIndicatorView.isHidden = true
             }
         }
+    }
+    
+    func refreshList() {
+        pageCount = 1
+        fetchMovies()
     }
 }

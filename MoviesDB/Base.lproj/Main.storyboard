@@ -15,6 +15,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <customObject id="93M-ft-9go" customClass="MoviesListOutletObject" customModule="MoviesDB" customModuleProvider="target">
                     <connections>
+                        <outlet property="changeUIButton" destination="8c3-ne-WTI" id="Je9-ku-LU3"/>
                         <outlet property="collectionView" destination="jMv-9X-d30" id="pEl-8d-IlL"/>
                         <outlet property="loader" destination="Da8-VI-Vtb" id="zpe-zS-wC0"/>
                         <outlet property="noResultsView" destination="eyY-89-1ng" id="Ak4-aZ-XDi"/>
@@ -171,43 +172,29 @@
                             <constraint firstItem="eyY-89-1ng" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="yeC-Hx-jWo"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="otr-9r-PYr"/>
+                    <navigationItem key="navigationItem" id="otr-9r-PYr">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Rrb-io-Z3T">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="8c3-ne-WTI">
+                                <rect key="frame" x="364" y="7.5" width="30" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="ABD-2o-1vo"/>
+                                    <constraint firstAttribute="height" constant="25" id="xgj-1O-4MD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <state key="normal" title="List"/>
+                                <connections>
+                                    <action selector="restructureUI:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BlF-S0-RBR"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="outletObjects" destination="93M-ft-9go" id="Ftx-9w-YCC"/>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1887" y="110"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="Ikg-43-gkn">
-            <objects>
-                <viewController id="WsD-Gg-ted" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="u9k-CM-g9y">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZRI-n5-qKx">
-                                <rect key="frame" x="161" y="431.5" width="92" height="33"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
-                                <state key="normal" title="Movies List"/>
-                                <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="dfD-9w-mc0"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="z4k-W2-6Ik"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="ZRI-n5-qKx" firstAttribute="centerY" secondItem="u9k-CM-g9y" secondAttribute="centerY" id="Vhl-bq-WRE"/>
-                            <constraint firstItem="ZRI-n5-qKx" firstAttribute="centerX" secondItem="u9k-CM-g9y" secondAttribute="centerX" id="zjD-Bq-go3"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="ZgS-gO-J0e"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZKT-8Q-dUq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="906" y="110"/>
+            <point key="canvasLocation" x="981" y="110"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="g6B-Qb-r6U">
@@ -218,7 +205,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="WsD-Gg-ted" kind="relationship" relationship="rootViewController" id="6pm-BQ-AaE"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="mgI-XB-Ngr"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="atK-Lf-fRV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

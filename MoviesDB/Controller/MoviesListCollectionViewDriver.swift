@@ -9,15 +9,18 @@ import UIKit
 
 protocol CollectionViewDriverDelegate: class {
     func startPagination()
+    func refreshList()
 }
 
 class MoviesListCollectionViewDriver: NSObject {
 
     weak var delegate: CollectionViewDriverDelegate?
     let collectionView: UICollectionView
-    var movieData: [MoviesViewModel] = []
+    var movieData = [MoviesViewModel]()
+    var isGridView = true
     let pendingOperations = PendingOperations()
     let imageCache = NSCache<NSString, UIImage>()
+    var refreshControl: UIRefreshControl?
     
     init(cv: UICollectionView) {
         self.collectionView = cv
@@ -25,6 +28,20 @@ class MoviesListCollectionViewDriver: NSObject {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 44, right: 8)
+        
+        collectionView.alwaysBounceVertical = true
+        let refresher = UIRefreshControl()
+        refresher.addTarget(self, action: #selector(self.refreshStream), for: .valueChanged)
+
+        refreshControl = refresher
+        collectionView.addSubview(refreshControl!)
+    }
+    
+    @objc func refreshStream() {
+        refreshControl?.beginRefreshing()
+        self.delegate?.refreshList()
+        refreshControl?.endRefreshing()
+
     }
     
     func reloadCV(with movies: [SearchResult], fromPagination: Bool) {
@@ -36,6 +53,12 @@ class MoviesListCollectionViewDriver: NSObject {
             movieData.append(MoviesViewModel(movie: movie))
         }
         collectionView.isHidden = false
+        self.collectionView.reloadData()
+    }
+    
+    func reloadCV(for gridView: Bool) {
+        
+        self.isGridView = gridView
         self.collectionView.reloadData()
     }
     
@@ -79,6 +102,8 @@ class MoviesListCollectionViewDriver: NSObject {
             pendingOperations.downloadsInProgress[indexPath] = downloader
             pendingOperations.downloadQueue.addOperation(downloader)
         }
+        
+        print(pendingOperations.downloadsInProgress)
     }
 }
 
@@ -98,7 +123,6 @@ extension MoviesListCollectionViewDriver: UICollectionViewDelegate, UICollection
             
             switch (dataSource.state) {
             case .Failed:
-                print("Failed at \(indexPath.item)")
                 cell.failedLoading()
             case .New:
                 startDownload(for: dataSource, at: indexPath)
@@ -122,9 +146,18 @@ extension MoviesListCollectionViewDriver: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let padding: CGFloat = 8
-        let cellWidth = UIScreen.main.bounds.size.width/3 - (4*padding)
         let titleHeight: CGFloat = 44
-        let cellHeight: CGFloat = cellWidth + (0.25*cellWidth) + titleHeight
+        
+        var cellWidth: CGFloat
+        var cellHeight: CGFloat
+        
+        if isGridView {
+            cellWidth = UIScreen.main.bounds.size.width/3 - (4*padding)
+            cellHeight = cellWidth + (0.25*cellWidth) + titleHeight
+        } else {
+            cellWidth = UIScreen.main.bounds.size.width - (2*padding)
+            cellHeight = cellWidth/2 + titleHeight
+        }
         
         return CGSize(width: cellWidth, height: cellHeight)
     }

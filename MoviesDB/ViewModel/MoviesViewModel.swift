@@ -23,6 +23,8 @@ class MoviesViewModel {
         self.name = "\(movie.Title) - \(movie.Year)"
         if movie.Poster.isValidURL {
             self.moviePosterURL = URL(string: movie.Poster)
+        } else {
+            state = .Failed
         }
     }
 }

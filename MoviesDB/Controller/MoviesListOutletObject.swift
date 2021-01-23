@@ -23,4 +23,5 @@ class MoviesListOutletObject: NSObject {
     @IBOutlet weak var paginationIndicator: UIActivityIndicatorView!
     @IBOutlet weak var paginationIndicatorView: UIView!
     @IBOutlet weak var paginationIndicatorBottom: NSLayoutConstraint!
+    @IBOutlet weak var changeUIButton: UIButton!
 }
